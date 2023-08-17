@@ -9,8 +9,7 @@ catalog: true
 tags:
     - iOS
     - ReactiveCocoa
-    - 函数式编程
-    - 开源框架
+    - Functional Programming
 ---
 # 前言
 

@@ -10,7 +10,7 @@ tags:
     - iOS
     - Objective-C
     - AsyncDisplayKit
-    - 开源库
+    - Open Source
 ---
 
 > AsyncDisplayKit 2.0 Tutorial: Getting Started
