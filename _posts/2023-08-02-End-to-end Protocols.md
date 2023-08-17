@@ -111,4 +111,5 @@ Other idea:
 Reuse goroutine: create goroutine pool.
 
 > Useful link: https://juejin.cn/post/7192268132470227000?searchId=20230803034702729AC52C84222F00F505
+
 > Here is my substack link: <https://open.substack.com/pub/minyizou/p/end-to-end-protocols-remote-procedure?r=2k1xwy&utm_campaign=post&utm_medium=web>
