@@ -2,8 +2,8 @@
 layout:     post
 title:      End-to-end Protocols: Remote Procedure Call
 subtitle:   RPC concept
-date:       2017-01-06
-author:     BY
+date:       2023-08-02
+author:     Minyi
 header-img: img/post-bg-ios9-web.jpg
 catalog: true
 tags:
@@ -11,9 +11,10 @@ tags:
     - Distribute System
     - Go
 ---
-# Introduction 
 
-Here is my substack link: https://open.substack.com/pub/minyizou/p/end-to-end-protocols-remote-procedure?r=2k1xwy&utm_campaign=post&utm_medium=web
+> Here is my substack link: https://open.substack.com/pub/minyizou/p/end-to-end-protocols-remote-procedure?r=2k1xwy&utm_campaign=post&utm_medium=web
+
+# Introduction 
 
 #### Concept
 
