@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      End-to-end Protocols: Remote Procedure Call
+title:      End-to-end Protocols (Remote Procedure Call)
 subtitle:   RPC concept
 date:       2023-08-02
 author:     Minyi
