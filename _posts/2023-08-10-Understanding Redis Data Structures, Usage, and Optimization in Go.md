@@ -1,13 +1,13 @@
 ---
 layout:     post
 title:      Understanding Redis Data Structures, Usage, and Optimization in Go
-subtitle:   RPC concept
+subtitle:   Delving into Redis
 date:       2023-08-10
 author:     Minyi
 header-img: img/post-bg-universe.jpg
 catalog: true
 tags:
-    - RPC
+    - Redis
     - Distribute System
     - Golang
 ---
