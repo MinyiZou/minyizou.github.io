@@ -1,129 +1,96 @@
 ---
 layout:     post
-title:      Architecture of Kafka
-subtitle:   Message Queue-Kafka
-date:       2023-08-13
+title:      Microservices Architecture Principles
+subtitle:   History of Architecture
+date:       2023-08-16
 author:     Minyi
 header-img: img/post-bg-universe.jpg
 catalog: true
 tags:
-    - Kafka
-    - Message Queue
+    - Microservices
     - Distribute System
     - Golang
 ---
 
-# Introduction 
+# History
 
-## Concept
+## Monolithic architecture
 
-Apache Kafka is a distributed event streaming platform that is widely used for building real-time data pipelines and streaming applications.
-![](https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F1cdceadc-df79-47ca-8ba9-b6bb3dadf8d3_1994x960.png)
+Monolithic architecture refers to a software design pattern where all components and services are combined into a single codebase and run as a single application.
 
-1.  **Producer**:
+![](https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fff70cf2a-f8ca-4aa4-b0f5-4a1a18cc7cfe_1404x720.png)
 
-    -   **Role**: Sends or publishes data to Kafka topics.
-    -   **Functionality**: Producers push data to topics. The data being sent by a producer is typically called a "message", and each message has a key and a value.
-    -   **Responsibility**: Producers decide which topic partition the data will be written to, typically based on the message key.
-    -   **Fault Tolerance**: Can be configured for various levels of acknowledgement to ensure data durability.
+> refer to: https://medium.com/design-microservices-architecture-with-patterns/when-to-use-monolithic-architecture-57c0653e245e
 
-1.  **Leader**:
+## Vertical Application Architecture
 
-    -   **Role**: The primary replica for a partition and serves client requests for that partition.
-    -   **Functionality**: Every partition has one leader. When messages are written to a topic, they are written to the partition's leader.
-    -   **Responsibility**: Leaders handle all reads and writes for the respective partition. If a leader fails, a new leader is elected from the existing followers for that partition.
-    -   **Fault Tolerance**: Plays a crucial role in Kafka's ability to tolerate failures. If the leader of a partition fails, one of its followers will automatically become the new leader.
+Vertical Application Architecture refers to a design approach where different functionalities or components of a system are separated based on specific business or domain capabilities, rather than technical layers.
 
-1.  **Follower**:
+![](https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Faa21e698-e649-406c-8f6e-d427d788a8b6_1048x848.png)
 
-    -   **Role**: Replicas of the leader that passively replicate the leader's data.
-    -   **Functionality**: Followers consume messages from the leader just like a typical Kafka consumer. However, they don’t serve client requests.
-    -   **Responsibility**: Their primary duty is to replicate the data and to step in as the leader if the current leader fails.
-    -   **Fault Tolerance**: Helps in providing data redundancy. If a broker (or multiple brokers) containing leaders fail, the followers can ensure data isn't lost and can step in as leaders.
+![](https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F75beb902-3326-4a2f-8dcb-e0dfdf5500a9_1600x786.png)
 
-1.  **Consumer**:
+## Distributed Architecture
 
-    -   **Role**: Reads or subscribes to data from Kafka topics.
-    -   **Functionality**: Consumers read data from topics, starting from a specific offset (i.e., position) and can read data from multiple topics.
-    -   **Responsibility**: Keeps track of what has been read by storing the offset of messages. If a consumer dies or if a new consumer is added, it can start reading from where the last consumer left off.
-    -   **Consumer Groups**: Multiple consumers can work together as part of a consumer group. When they do so, they cooperate to consume data from one or more topics, with each consumer in the group reading from a unique set of partitions.
+Distributed Architecture refers to a system where components and services are run on different machines or servers, typically interconnected by a network, to achieve a common goal. Within such an architecture, it's common practice to extract independent services that are unrelated to the core business logic.
 
-1.  **Broker**:
+![](https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F528487f5-3040-443d-943f-2fd5edd60e10_1476x870.png)
 
-    -   **Role**: A Kafka server that stores data and serves client requests.
-    -   **Functionality**: Kafka messages are organized into topics, which are split into partitions. Each broker manages a subset of these partitions. A Kafka cluster is composed of multiple brokers.
-    -   **Scalability**: Adding more brokers allows Kafka to handle more total data and requests, offering a way to scale out the system.
-    -   **Fault Tolerance**: Brokers support data replication. Each topic can be configured to have its data replicated across multiple brokers, ensuring data is still available even if some brokers fail.
-![](https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F95522c11-3973-4446-909b-29287afe5122_2220x1196.png)
+## Service oriented architecture (SOA)
 
-#### Hypothetical scenario
+Service-Oriented Architecture (SOA) is a design pattern in which software applications are organized around services rather than monolithic components or modules. This architectural style encourages the decomposition of a business process or function into a set of interconnected services that can be reused to build a flexible and scalable system.
 
-Sending one message at a time and waiting for an acknowledgement before sending the next, the implications would be **Latency Increase**.
+![](https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F9f4a7cb4-1176-492f-94ee-f62e04076e07_1302x888.png)
 
-Therefore, you can use a batch and send several messages once a time:
+## Microservices architecture
 
-![](https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fbea6163a-1596-4fff-936c-21daed304533_310x512.png)
+Microservices architecture is a software development approach that breaks down a large application into multiple small, independent services. Each service can run and be deployed independently and typically has its own database and API.
 
-However, f an individual message is too large and multiple such messages are sent concurrently, it could saturate the available bandwidth.
+![](https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F23b05ca0-888f-4a51-bb85-4279800a0fb2_1808x682.png)
 
-**Message Compression**: Kafka supports message compression out of the box. Producers can compress messages before sending, and consumers can decompress these messages upon receiving. Kafka supports several compression codecs including GZIP, Snappy, LZ4, and Zstd. By using compression, you can significantly reduce the size of the messages and hence the required bandwidth.
-![](https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F54ac9194-9d94-44e2-8594-be315e5df008_2190x996.png)
+1.  Service Governance: This refers to the set of practices, policies, and standards that help manage and control the microservices in a system. Service governance includes aspects such as service discovery (finding available services), service versioning (managing different versions of a service), and load balancing (distributing requests across multiple instances of a service). It helps ensure that services can effectively communicate with each other and that the overall system operates smoothly.
+2.  Observability: Observability in microservices architecture involves monitoring and logging the behavior of services to understand their performance and health. This is essential for detecting and diagnosing issues, as well as optimizing the system. Observability tools provide insights into metrics such as response times, error rates, and resource usage. They also allow for tracing the flow of requests through services to identify bottlenecks or failures.
+3.  Security: Security is a critical element in microservices architecture, as each service can be a potential attack vector. Security practices in microservices include securing communication between services (e.g., using HTTPS), implementing authentication and authorization (verifying the identity of users and services and controlling their access), and protecting data (e.g., encrypting sensitive data). Ensuring security helps prevent unauthorized access and data breaches, safeguarding the integrity and confidentiality of the system.
 
-#### Broker
+![](https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F37519412-7090-4154-9721-d29e8241dfd8_912x538.png)
 
-**Broker file structure:**
+If we think of HDFS as Microservice, it would be like this:
 
-![](https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F02741429-d8e3-40fd-aec7-bfc42f4f4c2e_1744x904.png
+![](https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F0ace12bc-9eee-4d60-a852-ce41c7c3021d_996x640.png)
 
-**How to get the message from a broker?**
+The communications between different services in Microservice:
 
-![](https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fdfaff41b-bd73-4aee-8778-0292876bc64b_2380x1174.png)
+![](https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F9e62432d-ba2a-4d49-82eb-b40b34fb3411_1138x692.png)
 
-In Kafka, topics are divided into partitions, and each message within a partition has an offset which serves as a unique identifier. These messages are also usually sequenced in order of their arrival time. Given this ordered nature, if you want to find a message based on a specific timestamp, you can utilize a binary search approach for efficiency.
+#### Registration
 
-1.  Binary Search for Timestamp
-1.  Retrieving the Largest Offset Less Than Target Timestamp
-1.  Fetching Data
+When service A needs to communicate with service B, using a hardcoded IP address and port number is not an ideal approach (as service B could have multiple IP addresses). Instead, you might want to consider using a NameServer. However, there could be issues if the instance in Service B becomes unavailable.
 
-##### Broker Optimization - Zero Copy
+![](https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F36daa1be-ce74-4b55-8139-dc4fc6b66ee4_940x714.png)
 
-![](https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F614395b2-645d-4b31-b62f-ab749ef16832_2000x1252.png)
+Therefore, you can add a service registry to solve the problem:
 
-"Zero copy" is a method that, as the name suggests, enables data to be transferred between buffers without being copied multiple times between application address space and the kernel address space. When applied to systems like Kafka's brokers, zero copy can significantly improve efficiency and performance, especially when dealing with large volumes of data.
+![](https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fb705d86e-6507-477e-aec1-0e61a1f0573d_978x874.png)
 
-1.  **Traditional Data Transfer**:
+Meanwhile, it is much easy to control Service online and service offline:
 
-    -   In a conventional data transfer mechanism, data sent from a source to a destination usually undergoes several copies: first from the application to the OS kernel, then to the system's I/O buffers, and finally to the destination application. Each of these copy operations consumes CPU, memory, and I/O bandwidth.
+Procedure of service offline:
 
-1.  **Zero Copy in Kafka**:
+![](https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F87d79006-f311-4fe6-9000-9572b22b633b_1130x884.png)
 
-    -   Kafka brokers are designed to handle a lot of read and write operations, especially when serving many producers and consumers. One key performance optimization Kafka uses to achieve high throughput is leveraging the zero copy technology.
-    -   When a Kafka broker sends a message to a consumer or replicates data to another broker, it can use the `sendfile` system call (available in many modern operating systems) to transfer data directly from the file system cache to the network socket, bypassing the need to copy data to the application layer entirely.
-    -   This means that when reading data from a Kafka topic partition log (which is essentially a file on disk), the data doesn't need to be copied into the broker's JVM memory before being sent out. Instead, it goes directly from disk cache to the network, saving both CPU and memory resources.
+Procedure of service online:
 
-#### Consumer
+![](https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fc9420802-3bc7-4cf2-ba1c-a4c13261fb0f_1220x882.png)
 
-![](https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fbd6e0b97-a9cc-434c-9dc5-05a4143b399a_1700x1000.png)
+![](https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F827bacbd-f75e-40d3-bffd-fede6288338c_1222x838.png)
 
-**How does consumer1 in group 1 select a partition in Topic?**
+![](https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F2307245e-a936-4ebb-833e-a45b62650015_1276x882.png)
 
-1.  Manual configuration when starting kafka service. But if this partition crashed accidentally, it can not complete disaster discovery automatically.
-1.  Use coordinator to configure consumers and partitions automatically.
+  
+Microservices Traffic Patterns:
 
-![](https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fa134146e-fe78-40d3-b64f-7995536c98fb_2250x1042.png)
+**Internet uses HTTP, intranet uses RPC.** Why?
 
-The steps of consumer rebalance:
+RPC can be more efficient than HTTP, as it does not require the overhead of HTTP headers and can use binary data formats that are more compact and faster to parse than textual data formats such as JSON or XML.
 
-![](https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fbd0d8f84-044b-450e-a294-8c426081668e_2078x1116.png)
-
-#### Restart kafka
-
-![](https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F1b85afde-f4c9-492c-be55-2b9f8c80ded5_1888x1304.png)
-
-#### Load imbalance
-
-![](https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fe9a1bb10-eb03-4b10-8195-f31f2bad95b8_1878x842.png)
-
-For instance, consider a scenario where broker 1 is overloaded with more partitions and data, necessitating the transfer of partition 3 to broker 2. This transfer can introduce IO challenges, requiring intricate solutions to address the issues :
-
-![](https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F286ac777-1679-4aff-b2db-584c2f5af07e_2024x900.png)
+![](https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F9764fc2e-0a68-4703-b593-11d4facdfc2b_1156x654.png)
