@@ -4,7 +4,7 @@ title:      End-to-end Protocols (Remote Procedure Call)
 subtitle:   RPC concept
 date:       2023-08-02
 author:     Minyi
-header-img: img/post-bg-ios9-web.jpg
+header-img: img/post-bg-universe.jpg
 catalog: true
 tags:
     - RPC
@@ -12,11 +12,11 @@ tags:
     - Go
 ---
 
-> Here is my substack link: https://open.substack.com/pub/minyizou/p/end-to-end-protocols-remote-procedure?r=2k1xwy&utm_campaign=post&utm_medium=web
+> Here is my substack link: <https://open.substack.com/pub/minyizou/p/end-to-end-protocols-remote-procedure?r=2k1xwy&utm_campaign=post&utm_medium=web>
 
 # Introduction 
 
-#### Concept
+# Concept
 
 You have the option to create your own RPC framework, which is in line with the approach taken by the CMU lab’ s requirement:
 
@@ -34,7 +34,7 @@ Furthermore, if RPC catches your interest, feel free to review this paper as wel
 
 <https://web.eecs.umich.edu/~mosharaf/Readings/RPC.pdf>
 
-[![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/926fd324813a47ac8c1a9e5a5b2521c4~tplv-k3u1fbpfcp-zoom-1.image)](https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F95390b73-c031-4e17-91a5-d902d61bdf90_1132x500.png)
+![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/926fd324813a47ac8c1a9e5a5b2521c4~tplv-k3u1fbpfcp-zoom-1.image)
 
 During the RPC runtime, when a user invokes a function locally, the user stub will encapsulate the message and send it to the callee. Upon receiving the message, the server-stub will extract and execute the corresponding function, then send the response back to the caller.
 
