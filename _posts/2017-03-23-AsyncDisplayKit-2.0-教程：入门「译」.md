@@ -8,7 +8,7 @@ header-img: img/post-bg-iWatch.jpg
 catalog: true
 tags:
     - iOS
-    - Objective-C
+    - Obj-C
     - AsyncDisplayKit
     - Open Source
 ---

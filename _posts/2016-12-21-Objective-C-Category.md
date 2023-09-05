@@ -9,7 +9,7 @@ catalog: true
 tags:
     - Category
     - iOS
-    - ObjC
+    - Obj-C
 ---
 
 >本文转载自美图点评技术团队的：[深入理解Objective-C：Category](http://tech.meituan.com/DiveIntoCategory.html)，略有修改。
